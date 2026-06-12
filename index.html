@@ -229,7 +229,7 @@
         <section class="craft-hero">
             <div>
                 <p>
-                    This project explored whether the CRAFT hand, a five-fingered hybrid-rigid/compliant dexterous hand, could be turned from a hardware design into a usable research platform for teleoperation and policy learning. Aditya focused on building the physical hand, mounting it to the I2RT YAM Ultra arm, and
+                    This project explored whether the CRAFT hand, a five-fingered hybrid hard-soft compliant dexterous hand, could be turned from a hardware design into a usable research platform for teleoperation and policy learning. Aditya focused on building the physical hand, mounting it to the I2RT YAM Ultra arm, and
                     teleoperating it with VR hand tracking. I focused on the simulation side: connecting HaMeR hand-pose predictions to simulated CRAFT controls, teleoperating the hand on an arm in Robosuite and DexJoCo, and testing whether policies trained for an Allegro hand could be mapped zero-shot to CRAFT.
                 </p>
                 <div class="craft-callout">
@@ -366,18 +366,12 @@
             We therefore added two paths. For HaMeR teleoperation, CRAFT uses a direct 22-value action: <code>[end-effector xyz, quaternion, 15 CRAFT targets]</code>. For zero-shot policy tests, we kept a compatibility mapping from Allegro-shaped actions to CRAFT controls so trained DexJoCo policies could at least be evaluated without retraining.
         </p>
 
-        <div class="craft-video-grid">
+        <div class="craft-video-grid craft-video-wide">
             <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/click-mouse-success-ego-right.jpg">
-                    <source src="files/dexjoco-teleoperation/click_mouse_success_ego_right.mp4" type="video/mp4">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/click-mouse-success-camera-ego-side-by-side.jpg">
+                    <source src="files/dexjoco-teleoperation/click_mouse_success_camera_ego_side_by_side.mp4" type="video/mp4">
                 </video>
-                <figcaption>Successful DexJoCo click-mouse teleoperation from the ego/right-hand view.</figcaption>
-            </figure>
-            <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/click-mouse-success-front-side-by-side.jpg">
-                    <source src="files/dexjoco-teleoperation/click_mouse_success_front_side_by_side.mp4" type="video/mp4">
-                </video>
-                <figcaption>Successful DexJoCo click-mouse teleoperation shown from the front side-by-side view.</figcaption>
+                <figcaption>Successful DexJoCo click-mouse teleoperation with the human camera frame on the left and the ego-right simulator view on the right.</figcaption>
             </figure>
         </div>
 
@@ -526,6 +520,14 @@
         <p>
             In short, our project turned CRAFT into a working experimental target rather than just a hand design. The resulting system is still rough, but it now has the pieces needed for the next research question: what challenging tasks can be accomplished by a policy for the five-finger compliant hand in simulation and real world?
         </p>
+
+        <h2>Github Repositories</h2>
+        <ul>
+            <li>CRAFT MJCF Corrected - <a href="https://github.com/sadmankiba/CRAFT-MJCF-Corrected">https://github.com/sadmankiba/CRAFT-MJCF-Corrected</a> </li>
+            <li>HaMeR CRAFT Teleoperation - <a href="https://github.com/sadmankiba/HaMeR-CRAFT-Teleop">https://github.com/sadmankiba/HaMeR-CRAFT-Teleop</a> </li>
+            <li>Robosuite CRAFT Teleoperation - <a href="https://github.com/sadmankiba/Robosuite-CRAFT-Teleop">https://github.com/sadmankiba/Robosuite-CRAFT-Teleop</a> </li>
+            <li>DexJoCo CRAFT Integration - <a href="https://github.com/sadmankiba/DexJoCo-CRAFT-Teleop">https://github.com/sadmankiba/DexJoCo-CRAFT-Teleop</a> </li>
+        </ul>
 
         <h2>References</h2>
         <ul>
