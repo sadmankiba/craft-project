@@ -373,19 +373,17 @@ thumb_mcp, thumb_2, thumb_3</pre>
 
         <h2>Zero-Shot Allegro Policy Transfer to CRAFT</h2>
         <p>
-            The most interesting negative result came from zero-shot inference. DexJoCo policies trained on Allegro can
-            perform tasks such as hammering or pick-and-place with the original hand. We replaced the hand with CRAFT and
-            mapped the policy's Allegro action outputs into CRAFT controls. This was intentionally unfair to CRAFT in one
-            sense: the policy had never learned the CRAFT kinematics, finger shape, thumb orientation, or contact geometry.
-            But that is exactly why the experiment was useful. It tested whether an action-level retargeting layer alone
-            was enough.
+            DexJoCo policies were trained with Allegro hand mounted on a Franka Panda arm to perform tasks such as hammering or pick-and-place. Replacing Allegro hand completely with CRAFT hand puts the fingers in a different initial position as the CRAFT's base is relatively large than Allegro's. So, we chose to attach only CRAFT fingers to Allegro base to create a hybrid hand setup. We mapped the policy's Allegro action outputs into CRAFT controls. For the mapping, we incorporated these design decisions:
+            <ol>
+                <li>Finger count mismatch: The Allegro hand has 4 finger. As CRAFT hand has 5 fingers, during mapping, we made the pinky finger of CRAFT hand mimic the ring finger.</li>
+                <li>Joint control mismatch: Allegro hand has 4 joint controls for each finger, but CRAFT has three. So, we disregarded the distal joint control for allegro hand and mapped the medial joint control to CRAFT coupled joints. Also, the Allegro hand fingers rotate around the principal axis, while the CRAFT hand fingers move sideways. So, we mapped the effect of the finger rotation of Allegro's hand to a small sideways movement to CRAFT hand fingers.</li>
+                <li>Thumb orientation mismatch: The Allegro hand thumb is oriented differently than CRAFT's. The Allegro thumb is longer than the CRAFT thumb and creates direct opposition with the other fingers. As CRAFT hand has a different thumb orientation, we changed the CRAFT thumb orientation and rotation axis to match the Allegro hand.</li>
+            </ol>
+
+              Even after these changes, the  CRAFT fingers had kinematics, finger shape, thumb size, and contact geometry, which the Allegro-trained policy never saw. But that is exactly why the experiment was useful. It tested whether an action-level retargeting layer alone was enough.
         </p>
         <p>
-            The answer was: sometimes partially, but not reliably. CRAFT's thinner fingers reduced contact surface, the
-            mapped thumb often failed to oppose the other fingers, and the medial/distal curl could over-close compared to
-            what the Allegro-trained policy expected. These failures are good evidence that CRAFT likely needs either
-            CRAFT-specific demonstrations, retargeted physically plausible data, or policy fine-tuning in the CRAFT
-            simulator rather than a purely geometric action remap.
+            The answer was: sometimes partially, but not reliably. CRAFT's uneven inner fingers reduced contact surface, the mapped thumb often failed to create a tight grip to lift objects, and the curl with the coupled medial-distal joints did not match what the Allegro-trained policy expected. These failures are good evidence that CRAFT likely needs either CRAFT-specific demonstrations, retargeted physically plausible data, or policy fine-tuning in the CRAFT simulator rather than a purely geometric action remap.
         </p>
 
         <div class="craft-video-grid">
@@ -434,13 +432,14 @@ thumb_mcp, thumb_2, thumb_3</pre>
             <tbody>
                 <tr>
                     <td>Physical CRAFT hand build and I2RT mount</td>
-                    <td>Worked for demos</td>
-                    <td>The hand can be physically assembled and mounted, but practical teleoperation still needs better calibration and feedback.</td>
+                    <td>Working</td>
+                    <td>The hand can be physically assembled and mounted on a robot arm with an appropriate mount.</td>
                 </tr>
                 <tr>
-                    <td>HaMeR finger teleoperation in MuJoCo</td>
+                    <td>VR-based teleoperation for physical CRAFT hand</td>
                     <td>Worked qualitatively</td>
-                    <td>Vision-predicted MANO motion can drive CRAFT fingers after calibration, smoothing, actuator reorder, and control tuning.</td>
+                    <td>Combining hand tracking from Meta Quest and arm motion retargeting with Open Television works well in practice for the physical CRAFT hand.</td>
+                    <!-- after calibration, smoothing, actuator reorder, and control tuning. -->
                 </tr>
                 <tr>
                     <td>Arm + CRAFT teleoperation in sim</td>
@@ -449,7 +448,7 @@ thumb_mcp, thumb_2, thumb_3</pre>
                 </tr>
                 <tr>
                     <td>Zero-shot Allegro-to-CRAFT policy transfer</td>
-                    <td>Mostly failed, with partial successes</td>
+                    <td>Low success rate</td>
                     <td>Action remapping alone cannot hide the kinematic and contact differences between Allegro and CRAFT.</td>
                 </tr>
             </tbody>
@@ -457,19 +456,19 @@ thumb_mcp, thumb_2, thumb_3</pre>
 
         <h2>Next Steps</h2>
         <p>
-            The project suggests a clear next direction: stop spending most effort on teleoperation polish and use the
-            simulator to build policy-learning assets. A strong follow-up would retarget prior Allegro or human
-            manipulation datasets to CRAFT, reject physically implausible samples in MuJoCo, and train or fine-tune
-            policies directly on the corrected CRAFT model. The specific fixes suggested by our failures are to improve
-            thumb opposition, bring CRAFT fingers closer when grasping to increase contact area, reduce excessive distal
-            curl, and evaluate whether contact-aware feedback or depth sensing improves teleoperation data quality.
+            The project suggests that the CRAFT hand can be effectively controlled via vision-based teleoperation to collect demonstration data in both real-world and simulated environments. However, the limitations we observed indicate that further improvements in teleoperation quality and data collection are needed before training effective policies. We hypothesize that contact-aware feedback or depth sensing may improve teleoperation data quality. We also found that zero-shot policy transfer from a different hand design is not sufficient for reliable performance, suggesting that CRAFT-specific data or fine-tuning will be necessary for successful policy learning.
         </p>
 
         <p>
-            In short, our project turned CRAFT into a working experimental target rather than just a hand design. The
-            resulting system is still rough, but it now has the pieces needed for the next research question: can a
-            five-finger compliant hand learn useful manipulation policies from retargeted simulation data?
+            In short, our project turned CRAFT into a working experimental target rather than just a hand design. The resulting system is still rough, but it now has the pieces needed for the next research question: what challenging tasks can be accomplished by a policy for the five-finger compliant hand in simulation and real world?
         </p>
+
+        <h2>References</h2>
+        <ul>
+            <li>CRAFT hand<a href="https://craft-hand.github.io/">https://craft-hand.github.io/</a></li>
+            <li>HaMeR<a href="https://hamer.is.tue.mpg.de/">https://hamer.is.tue.mpg.de/</a></li>
+            <li>DexJoCo<a href="https://dexjoco.github.io/">https://dexjoco.github.io/</a></li>
+        </ul>
     </main></body>
 
 </html>
