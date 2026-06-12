@@ -138,6 +138,34 @@
             font-size: 0.95rem;
         }
 
+        .craft-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0 1.6rem;
+        }
+
+        .craft-image {
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .craft-image img {
+            width: 100%;
+            height: 360px;
+            display: block;
+            object-fit: contain;
+            background: #f7f9fb;
+        }
+
+        .craft-image figcaption {
+            padding: 0.85rem 1rem;
+            color: #41546a;
+            font-size: 0.95rem;
+        }
+
         .craft-table {
             width: 100%;
             border-collapse: collapse;
@@ -169,8 +197,13 @@
         @media (max-width: 800px) {
             .craft-hero,
             .craft-grid,
-            .craft-video-grid {
+            .craft-video-grid,
+            .craft-image-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .craft-image img {
+                height: auto;
             }
         }
     </style>
@@ -211,7 +244,7 @@
             </div>
         </div>
 
-        <h2>Physical CRAFT Hand and VR Teleoperation</h2>
+        <h2>Building Physical CRAFT Hand</h2>
         <p>
             The physical build used fully 3D-printed CRAFT fingers: white PLA for stable rigid geometry and black TPU for
             compliant joints. Aditya assembled the fingers, designed a custom wrist mount in Autodesk Fusion using the I2RT
@@ -219,12 +252,14 @@
             mounting target, so the wrist interface itself became part of the project.
         </p>
 
-        <div class="craft-video-grid">
-            <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/physical-vr-teleop.jpg">
-                    <source src="files/craft-hand-project/physical-vr-teleop.mp4" type="video/mp4">
-                </video>
-                <figcaption>Quest/VR-based CRAFT teleoperation. The setup worked, but calibration and thumb tracking were still fragile.</figcaption>
+        <div class="craft-image-grid">
+            <figure class="craft-image">
+                <img src="img/note/craft-hand-project/Wrist-Mount.png" alt="Custom wrist mount model for the CRAFT hand">
+                <figcaption>Custom wrist mount designed to connect the CRAFT hand to the I2RT YAM Ultra arm.</figcaption>
+            </figure>
+            <figure class="craft-image">
+                <img src="img/note/craft-hand-project/CRAFT-Hand-With-Wrist.png" alt="CRAFT hand assembled with the wrist mount">
+                <figcaption>CRAFT hand assembled with the wrist interface, showing how the mount adapts the hand base to the arm.</figcaption>
             </figure>
         </div>
 
@@ -234,6 +269,12 @@
         </p>
 
         <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/physical-vr-teleop.jpg">
+                    <source src="files/craft-hand-project/physical-vr-teleop.mp4" type="video/mp4">
+                </video>
+                <figcaption>Quest/VR-based CRAFT teleoperation. The setup worked, but calibration and thumb tracking were still fragile.</figcaption>
+            </figure>
             <figure class="craft-video">
                 <video controls preload="metadata" poster="img/note/craft-hand-project/posters/physical-arm-hand-teleop.jpg">
                     <source src="files/craft-hand-project/physical-arm-hand-teleop.mp4" type="video/mp4">
@@ -406,9 +447,10 @@
 
         <h2>References</h2>
         <ul>
-            <li>CRAFT hand<a href="https://craft-hand.github.io/">https://craft-hand.github.io/</a></li>
-            <li>HaMeR<a href="https://hamer.is.tue.mpg.de/">https://hamer.is.tue.mpg.de/</a></li>
-            <li>DexJoCo<a href="https://dexjoco.github.io/">https://dexjoco.github.io/</a></li>
+            <li>CRAFT hand: <a href="https://craft-hand.github.io/">https://craft-hand.github.io/</a></li>
+            <li>HaMeR: <a href="https://geopavlakos.github.io/hamer/">https://geopavlakos.github.io/hamer/</a></li>
+            <li>Robosuite: <a href="https://robosuite.ai/">https://robosuite.ai/</a></li>
+            <li>DexJoCo: <a href="https://dexjoco.github.io/">https://dexjoco.github.io/</a></li>
         </ul>
     </main></body>
 
