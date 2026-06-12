@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CRAFT Hand Project Report</title>
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+    <style>
+        body {
+            margin: 0;
+            color: #26323f;
+            background: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding: 2.5rem 1rem 3rem;
+            width: 100%;
+        }
+
+        code {
+            font-family: "Courier New", Courier, monospace;
+        }
+        .craft-report {
+            max-width: 980px;
+            margin: 0 auto;
+            line-height: 1.7;
+            text-align: left;
+            word-spacing: normal;
+            letter-spacing: 0;
+        }
+
+        .craft-report h1,
+        .craft-report h2,
+        .craft-report h3 {
+            color: #17324d;
+            text-align: left;
+            word-spacing: normal;
+            letter-spacing: 0;
+        }
+
+        .craft-report h1 {
+            font-size: 2.25rem;
+            line-height: 1.25;
+            margin-bottom: 0.4rem;
+        }
+
+        .craft-report p,
+        .craft-report li,
+        .craft-report td,
+        .craft-report figcaption {
+            text-align: left;
+            word-spacing: normal;
+            letter-spacing: 0;
+        }
+
+        .craft-report h2 {
+            margin-top: 2.8rem;
+            border-bottom: 1px solid #d7dee8;
+            padding-bottom: 0.35rem;
+        }
+
+        .craft-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+            gap: 1.5rem;
+            align-items: center;
+            margin: 1.4rem 0 2rem;
+        }
+
+        .craft-hero img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #d8e0ea;
+            box-shadow: 0 10px 30px rgba(30, 50, 70, 0.12);
+        }
+
+        .craft-meta {
+            color: #536579;
+            margin-bottom: 1rem;
+        }
+
+        .craft-callout {
+            background: #eef6f1;
+            border-left: 4px solid #2f855a;
+            padding: 1rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.2rem 0;
+        }
+
+        .craft-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+
+        .craft-card {
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .craft-card h3 {
+            font-size: 1.05rem;
+            margin-top: 0;
+        }
+
+        .craft-video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+        }
+
+        .craft-video {
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .craft-video video {
+            width: 100%;
+            display: block;
+            background: #111;
+        }
+
+        .craft-video figcaption {
+            padding: 0.85rem 1rem;
+            color: #41546a;
+            font-size: 0.95rem;
+        }
+
+        .craft-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            font-size: 0.95rem;
+        }
+
+        .craft-table th,
+        .craft-table td {
+            border: 1px solid #d7dee8;
+            padding: 0.75rem;
+            vertical-align: top;
+        }
+
+        .craft-table th {
+            background: #f3f6fa;
+        }
+
+        .craft-code {
+            font-family: "Roboto Mono", monospace;
+            font-size: 0.9rem;
+            background: #f5f7fa;
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 800px) {
+            .craft-hero,
+            .craft-grid,
+            .craft-video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <br><br>
+    <main class="container craft-report">
+        <h1>CRAFT Hand: From a 3D-Printed Hand to Simulated Teleoperation and Zero-Shot Policy Transfer</h1>
+        <p class="craft-meta">
+            Course project report for CS295: Robot Deep Learning. Team: Aditya Mittal and Sadman Sakib. Posted: Jun 11, 2026.
+        </p>
+
+        <section class="craft-hero">
+            <div>
+                <p>
+                    This project explored whether the CRAFT hand, a five-fingered hybrid-rigid/compliant dexterous hand,
+                    could be turned from a hardware design into a usable research platform for teleoperation and policy
+                    learning. Aditya focused on building the physical hand, mounting it to the I2RT YAM Ultra arm, and
+                    teleoperating it with VR hand tracking. I focused on the simulation side: fixing the CRAFT MuJoCo
+                    model, connecting HaMeR hand-pose predictions to CRAFT controls, integrating the hand with robosuite
+                    and DexJoCo, and testing whether policies trained for an Allegro hand could be mapped zero-shot to
+                    CRAFT.
+                </p>
+                <div class="craft-callout">
+                    <strong>What is new here?</strong> We did not propose a new learning algorithm. The main contribution
+                    is a systems bridge: a physical CRAFT hand build, a corrected CRAFT MuJoCo model, HaMeR-driven CRAFT
+                    teleoperation in simulation, robosuite and DexJoCo integrations, and a first zero-shot action-mapping
+                    experiment from four-finger Allegro policies to the five-finger CRAFT hand.
+                </div>
+            </div>
+            <img src="img/note/craft-hand-project/craft-parts-web.jpg" alt="3D printed CRAFT hand parts">
+        </section>
+
+        <h2>Starting Point</h2>
+        <p>
+            Before our project, several useful pieces existed, but they did not form an end-to-end CRAFT platform. The
+            CRAFT hand design provided CAD files and a mechanical concept: rigid PLA links joined with soft TPU compliance.
+            HaMeR could reconstruct a MANO human hand pose from camera images, but its original release was an image/mesh
+            reconstruction system rather than a CRAFT-in-MuJoCo teleoperation controller. DexJoCo provided simulation
+            tasks, teleoperation infrastructure, and trained policies for a Panda arm with a four-finger Allegro hand, but
+            not for CRAFT. The missing piece was the set of adapters, model fixes, and control mappings needed to make
+            CRAFT behave as a real and simulated robot hand.
+        </p>
+
+        <div class="craft-grid">
+            <div class="craft-card">
+                <h3>Hardware baseline</h3>
+                <p>CRAFT had printable parts and an intended hand design, but our lab setup needed a new wrist mount and practical teleoperation path.</p>
+            </div>
+            <div class="craft-card">
+                <h3>Vision baseline</h3>
+                <p>HaMeR estimated MANO hand pose. We needed to turn those rotations into CRAFT actuator commands and usable visual feedback.</p>
+            </div>
+            <div class="craft-card">
+                <h3>Policy baseline</h3>
+                <p>DexJoCo policies acted on Panda + Allegro actions. We tested how far those actions could be transferred to CRAFT.</p>
+            </div>
+        </div>
+
+        <h2>Physical CRAFT Hand and VR Teleoperation</h2>
+        <p>
+            The physical build used fully 3D-printed CRAFT fingers: white PLA for stable rigid geometry and black TPU for
+            compliant joints. Aditya assembled the fingers, designed a custom wrist mount in Autodesk Fusion using the I2RT
+            arm geometry, and mounted the hand to the I2RT YAM Ultra setup. This was different from the original X-Arm
+            mounting target, so the wrist interface itself became part of the project.
+        </p>
+        <p>
+            We also tested Quest-based hand tracking for physical teleoperation. Open-TeleVision retargeted arm motion from
+            wrist pose, and the hand pose was interpreted relative to the Quest headset to reduce tracking noise. A manual
+            side-to-side calibration step was needed because thumb tracking was unreliable. This worked well enough for
+            qualitative demos, but it remained clunky in practice: calibration was sensitive, the thumb was finicky, and
+            the operator did not get useful contact feedback.
+        </p>
+
+        <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/physical-arm-hand-teleop.jpg">
+                    <source src="files/craft-hand-project/physical-arm-hand-teleop.mp4" type="video/mp4">
+                </video>
+                <figcaption>Physical CRAFT hand teleoperation on the I2RT arm. This demonstrates the mounted arm+hand platform rather than a learned policy.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/physical-vr-teleop.jpg">
+                    <source src="files/craft-hand-project/physical-vr-teleop.mp4" type="video/mp4">
+                </video>
+                <figcaption>Quest/VR-based CRAFT teleoperation. The setup worked, but calibration and thumb tracking were still fragile.</figcaption>
+            </figure>
+        </div>
+
+        <h2>Fixing the CRAFT MuJoCo Model</h2>
+        <p>
+            On the simulation side, the first blocker was that the CRAFT MJCF did not behave like a clean position-controlled
+            hand. The original model mixed degree-style actuator ranges with a simulator workflow that expected radian
+            targets, and the position actuators were too weak or slow for responsive teleoperation. We created corrected
+            XML variants and small inspection scripts so the hand could be loaded, swept through joint ranges, rendered,
+            and embedded into larger robot scenes.
+        </p>
+        <table class="craft-table">
+            <thead>
+                <tr>
+                    <th>Issue</th>
+                    <th>What we changed</th>
+                    <th>Why it mattered</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Joint/actuator range mismatch</td>
+                    <td>Created a corrected radian-based CRAFT MJCF and used compiled joint/control ranges consistently.</td>
+                    <td>HaMeR and policy outputs could be mapped into real MuJoCo targets instead of degree-like commands.</td>
+                </tr>
+                <tr>
+                    <td>Slow or weak finger motion</td>
+                    <td>Tuned position feedback gains and stepped physics multiple times per control update.</td>
+                    <td>Finger speed became visibly closer to the intended target motion, matching the professor's feedback after the presentation.</td>
+                </tr>
+                <tr>
+                    <td>Different actuator ordering</td>
+                    <td>Mapped CRAFT API order to MJCF actuator order: side MCP, forward MCP, and PIP for each finger, with DIP coupled to PIP.</td>
+                    <td>Without this reorder, visually reasonable hand-pose values moved the wrong simulated joints.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>
+            Each non-thumb CRAFT finger has four hinge joints but only three direct actuators. The fourth distal joint is
+            coupled to the PIP joint through a MuJoCo equality constraint. That means the controller should command MCP
+            side motion, MCP forward flexion, and PIP curl; the fingertip follows through the coupling. The thumb has the
+            same general pattern with CRAFT-specific names: <code>thumb_mcp</code>, <code>thumb_2</code>, and
+            <code>thumb_3</code>.
+        </p>
+
+        <pre class="craft-code">CRAFT API order:
+Ring, Index, Thumb, Middle, Pinky
+each as: PIP, MCP forward, MCP side
+
+MuJoCo actuator order:
+index_1, index_2, index_3,
+middle_1, middle_2, middle_3,
+ring_1, ring_2, ring_3,
+pinky_1, pinky_2, pinky_3,
+thumb_mcp, thumb_2, thumb_3</pre>
+
+        <figure class="craft-video">
+            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/panda-craft-mount.jpg">
+                <source src="files/craft-hand-project/panda-craft-mount.mp4" type="video/mp4">
+            </video>
+            <figcaption>CRAFT mounted on a Panda arm in simulation. This was an asset and control validation step before teleoperation and policy tests.</figcaption>
+        </figure>
+
+        <h2>HaMeR to CRAFT Teleoperation in MuJoCo</h2>
+        <p>
+            We modified the HaMeR teleoperation path so that a camera or video frame could drive the simulated CRAFT hand.
+            Relative to the original HaMeR release, the important changes were not in HaMeR's neural network weights; they
+            were in the system around it. We updated the hand-detection stack to work with modern MMPose/RTMPose, ran HaMeR
+            live on detected right-hand boxes, extracted MANO wrist and finger rotations, smoothed the axis-angle outputs,
+            calibrated per-joint min/max ranges, and converted those values into 15 CRAFT commands.
+        </p>
+        <p>
+            The core mapping was deliberately simple: for each target CRAFT actuator, choose a HaMeR/MANO joint, choose the
+            axis-angle component that best matched that CRAFT motion, normalize it through a calibration range, and invert
+            signs where the CRAFT joint direction disagreed with the human-hand convention. For MuJoCo, those 15 CRAFT
+            values then went through the CRAFT-to-MJCF reorder described above.
+        </p>
+        <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/hamer-sim-finger-count.jpg">
+                    <source src="files/craft-hand-project/hamer-sim-finger-count.mp4" type="video/mp4">
+                </video>
+                <figcaption>HaMeR-driven CRAFT finger teleoperation in MuJoCo. The demo shows a side-by-side human hand input and simulated finger motion.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/dexjoco-hamer-teleop.jpg">
+                    <source src="files/craft-hand-project/dexjoco-hamer-teleop.mp4" type="video/mp4">
+                </video>
+                <figcaption>DexJoCo HaMeR teleoperation branch. The arm pose stays in the 7-value end-effector format while CRAFT receives direct 15-value controls.</figcaption>
+            </figure>
+        </div>
+
+        <h2>Robosuite and DexJoCo Integration</h2>
+        <p>
+            After the presentation, we moved beyond finger-only teleoperation. In robosuite, we added a <code>CraftHand</code>
+            gripper wrapper that loads the CRAFT MJCF and attaches it to a Panda arm through robosuite's gripper factory.
+            The first useful scripts were not policies; they were rendering and rollout checks that made sure the hand
+            could be attached, actuated, viewed, and stepped through robosuite's action path.
+        </p>
+        <p>
+            In DexJoCo, the existing single-arm action format was designed around Panda + Allegro:
+            <code>[end-effector xyz, quaternion, 16 Allegro joint targets]</code>. CRAFT does not match that interface:
+            it has five fingers, 15 actuators, different thumb orientation, different joint couplings, and thinner fingers.
+            We therefore added two paths. For HaMeR teleoperation, CRAFT uses a direct 22-value action:
+            <code>[end-effector xyz, quaternion, 15 CRAFT targets]</code>. For zero-shot policy tests, we kept a
+            compatibility mapping from Allegro-shaped actions to CRAFT controls so trained DexJoCo policies could at least
+            be evaluated without retraining.
+        </p>
+        <figure class="craft-video">
+            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/vision-track-iiwa-craft.jpg">
+                <source src="files/craft-hand-project/vision-track-iiwa-craft.mp4" type="video/mp4">
+            </video>
+            <figcaption>Vision-based arm+CRAFT teleoperation in simulation. This exposed practical limitations: no haptic contact feedback, occasional hand tracking loss, and camera field-of-view constraints.</figcaption>
+        </figure>
+
+        <h2>Zero-Shot Allegro Policy Transfer to CRAFT</h2>
+        <p>
+            The most interesting negative result came from zero-shot inference. DexJoCo policies trained on Allegro can
+            perform tasks such as hammering or pick-and-place with the original hand. We replaced the hand with CRAFT and
+            mapped the policy's Allegro action outputs into CRAFT controls. This was intentionally unfair to CRAFT in one
+            sense: the policy had never learned the CRAFT kinematics, finger shape, thumb orientation, or contact geometry.
+            But that is exactly why the experiment was useful. It tested whether an action-level retargeting layer alone
+            was enough.
+        </p>
+        <p>
+            The answer was: sometimes partially, but not reliably. CRAFT's thinner fingers reduced contact surface, the
+            mapped thumb often failed to oppose the other fingers, and the medial/distal curl could over-close compared to
+            what the Allegro-trained policy expected. These failures are good evidence that CRAFT likely needs either
+            CRAFT-specific demonstrations, retargeted physically plausible data, or policy fine-tuning in the CRAFT
+            simulator rather than a purely geometric action remap.
+        </p>
+
+        <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/allegro-pick-bucket-success.jpg">
+                    <source src="files/craft-hand-project/allegro-pick-bucket-success.mp4" type="video/mp4">
+                </video>
+                <figcaption>Baseline: the trained DexJoCo policy succeeds on pick-and-bucket with the original Allegro hand.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-pick-bucket-fail.jpg">
+                    <source src="files/craft-hand-project/craft-pick-bucket-fail.mp4" type="video/mp4">
+                </video>
+                <figcaption>Zero-shot CRAFT mapping fails on the same style of task, showing that actuator remapping is not enough.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/allegro-hammer-nail-success.jpg">
+                    <source src="files/craft-hand-project/allegro-hammer-nail-success.mp4" type="video/mp4">
+                </video>
+                <figcaption>Baseline: Allegro hammer/nail policy succeeds in the original DexJoCo setup.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-hammer-nail-fail.jpg">
+                    <source src="files/craft-hand-project/craft-hammer-nail-fail.mp4" type="video/mp4">
+                </video>
+                <figcaption>CRAFT-mapped hammer/nail rollout. The failure highlights thumb opposition and finger-curl mismatch.</figcaption>
+            </figure>
+        </div>
+
+        <figure class="craft-video">
+            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-hammer-nail-partial.jpg">
+                <source src="files/craft-hand-project/craft-hammer-nail-partial.mp4" type="video/mp4">
+            </video>
+            <figcaption>A more favorable CRAFT hammer/nail rollout. This suggests the mapping can produce meaningful motion, but success depends heavily on contact geometry and task conditions.</figcaption>
+        </figure>
+
+        <h2>What Worked, What Did Not</h2>
+        <table class="craft-table">
+            <thead>
+                <tr>
+                    <th>Result</th>
+                    <th>Status</th>
+                    <th>What we learned</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Physical CRAFT hand build and I2RT mount</td>
+                    <td>Worked for demos</td>
+                    <td>The hand can be physically assembled and mounted, but practical teleoperation still needs better calibration and feedback.</td>
+                </tr>
+                <tr>
+                    <td>HaMeR finger teleoperation in MuJoCo</td>
+                    <td>Worked qualitatively</td>
+                    <td>Vision-predicted MANO motion can drive CRAFT fingers after calibration, smoothing, actuator reorder, and control tuning.</td>
+                </tr>
+                <tr>
+                    <td>Arm + CRAFT teleoperation in sim</td>
+                    <td>Partially worked</td>
+                    <td>Camera-based tracking can produce arm+hand motion, but tracking loss, lack of contact feedback, and field-of-view limits remain major issues.</td>
+                </tr>
+                <tr>
+                    <td>Zero-shot Allegro-to-CRAFT policy transfer</td>
+                    <td>Mostly failed, with partial successes</td>
+                    <td>Action remapping alone cannot hide the kinematic and contact differences between Allegro and CRAFT.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Next Steps</h2>
+        <p>
+            The project suggests a clear next direction: stop spending most effort on teleoperation polish and use the
+            simulator to build policy-learning assets. A strong follow-up would retarget prior Allegro or human
+            manipulation datasets to CRAFT, reject physically implausible samples in MuJoCo, and train or fine-tune
+            policies directly on the corrected CRAFT model. The specific fixes suggested by our failures are to improve
+            thumb opposition, bring CRAFT fingers closer when grasping to increase contact area, reduce excessive distal
+            curl, and evaluate whether contact-aware feedback or depth sensing improves teleoperation data quality.
+        </p>
+
+        <p>
+            In short, our project turned CRAFT into a working experimental target rather than just a hand design. The
+            resulting system is still rough, but it now has the pieces needed for the next research question: can a
+            five-finger compliant hand learn useful manipulation policies from retargeted simulation data?
+        </p>
+    </main></body>
+
+</html>
