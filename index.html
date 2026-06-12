@@ -120,6 +120,10 @@
             margin: 1.2rem 0;
         }
 
+        .craft-video-wide {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
         .craft-video {
             border: 1px solid #d7dee8;
             border-radius: 8px;
@@ -320,7 +324,7 @@
         <p>
             The CRAFT hand authors provided a teleoperation script with HaMeR for the physical CRAFT hand. For physical hand, the HaMeR's predicted parameters were inverted for the non-thumb and non-index fingers, and for all MCP sideways controls. For the simulated hand, we only inverted the Thumb PIP value from HaMeR's predictions. We also limited the MCP sideways ranges of CRAFT hand while mapping from HaMeR as the simulated CRAFT hand has wide MCP sideways range unlike human. We ran HaMeR live on detected right-hand boxes, extracted MANO wrist and finger poses, calibrated per-joint min/max ranges, and converted those values into 15 CRAFT commands.
         </p>
-        <div class="craft-video-grid">
+        <div class="craft-video-grid craft-video-wide">
             <figure class="craft-video">
                 <video controls preload="metadata" poster="img/note/craft-hand-project/posters/hamer-sim-finger-count.jpg">
                     <source src="files/craft-hand-project/hamer-sim-finger-count.mp4" type="video/mp4">
@@ -332,23 +336,29 @@
         <h2>Vision-based Arm + Hand Teleoperation in Robosuite and DexJoCo</h2>
         <p>
             Besides hand 3D pose prediction, HaMeR also estimates the camera parameters and 3D grasp orientation. We found that besides controling finger joints with HaMeR predictions, we can also control end-effector position and orientation with the predicted camera parameters and grasp orientation. 
-
-            After the presentation, we moved beyond finger-only teleoperation. In robosuite, we added a <code>CraftHand</code> gripper wrapper that loads the CRAFT MJCF model and attaches it to a Panda arm through robosuite's gripper factory. We verified that the hand could be attached, actuated, viewed, and stepped through robosuite's action path. We also verified that 3D pose and camera parameters prediction from HaMeR could be used to control both the CRAFT hand and the pose of the robot arm end effector in Robosuite. However, Robosuite's gripper classes were designed for two-finger parallel-jaw grippers and that imposed some limitations for joint controls. For example, during teleoperation, the CRAFT hand fingers could not be curled to the fully closed position. So, we switched to DexJoCo for teleoperation in simulation.
         </p>
 
-        <figure class="craft-video">
-            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/panda-craft-mount.jpg">
-                <source src="files/craft-hand-project/panda-craft-mount.mp4" type="video/mp4">
-            </video>
-            <figcaption>CRAFT mounted on a Panda arm in simulation. This was an asset and control validation step before teleoperation and policy tests.</figcaption>
-        </figure>
+        <p>
+            After the presentation, we moved beyond finger-only teleoperation. In robosuite, we added a <code>CraftHand</code> gripper wrapper that loads the CRAFT MJCF model and attaches it to a Panda arm through robosuite's gripper factory. We verified that the hand could be attached, actuated, viewed, and stepped through robosuite's action path. We also verified that HaMeR's predicted parameters could be used to control both the CRAFT hand and the robot arm end effector pose in Robosuite. However, Robosuite's gripper classes were designed for two-finger parallel-jaw grippers and that imposed some limitations for joint controls. For example, during teleoperation, the CRAFT hand fingers could not be curled to the fully closed position. So, we switched to DexJoCo for teleoperation in simulation.
+        </p>
+        
 
-        <figure class="craft-video">
-            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/vision-track-iiwa-craft.jpg">
-                <source src="files/craft-hand-project/vision-track-iiwa-craft.mp4" type="video/mp4">
-            </video>
-            <figcaption>Vision-based arm+CRAFT teleoperation in simulation. This exposed practical limitations: no haptic contact feedback, occasional hand tracking loss, and camera field-of-view constraints.</figcaption>
-        </figure>
+        <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/panda-craft-mount.jpg">
+                    <source src="files/craft-hand-project/panda-craft-mount.mp4" type="video/mp4">
+                </video>
+                <figcaption>CRAFT hand mounted on a Panda arm in Robosuite. This was an asset and control validation step before teleoperation and policy tests.</figcaption>
+            </figure>
+
+            <figure class="craft-video">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/vision-track-iiwa-craft.jpg">
+                    <source src="files/craft-hand-project/vision-track-iiwa-craft.mp4" type="video/mp4">
+                </video>
+                <figcaption>HaMeR-based arm teleoperation in Robosuite. Only the end-effector pose was set. The robot joint controls  were derived with inverse kinematics.</figcaption>
+            </figure>
+        </div>
+        
 
         <p>
             DexJoCo created some simulation environment tasks for dexterous manipulation and the joint control for hands is more streamlined than Robosuite. We used HaMeR predicted values to control a Panda arm + CRAFT hand setup similar to Robosuite. This setup is described in next section. In DexJoCo, the existing single-arm action format was designed around Panda + Allegro:
@@ -358,13 +368,13 @@
 
         <div class="craft-video-grid">
             <figure class="craft-video">
-                <video controls preload="metadata">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/click-mouse-success-ego-right.jpg">
                     <source src="files/dexjoco-teleoperation/click_mouse_success_ego_right.mp4" type="video/mp4">
                 </video>
                 <figcaption>Successful DexJoCo click-mouse teleoperation from the ego/right-hand view.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/click-mouse-success-front-side-by-side.jpg">
                     <source src="files/dexjoco-teleoperation/click_mouse_success_front_side_by_side.mp4" type="video/mp4">
                 </video>
                 <figcaption>Successful DexJoCo click-mouse teleoperation shown from the front side-by-side view.</figcaption>
@@ -376,15 +386,12 @@
         </p>
 
         
-
-        <div class="craft-video-grid">
-            <figure class="craft-video">
-                <video controls preload="metadata">
-                    <source src="files/dexjoco-teleoperation/pick_bucket_fail.mp4" type="video/mp4">
-                </video>
-                <figcaption>A HaMeR teleoperation in DexJoCo that failed. I teleoperated the Panda + CRAFT hand setup. However, as I did not feel contact, I was not successful in grasping and lifting the object.</figcaption>
-            </figure>
-        </div>
+        <figure class="craft-video">
+            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/dexjoco-pick-bucket-fail.jpg">
+                <source src="files/dexjoco-teleoperation/pick_bucket_fail.mp4" type="video/mp4">
+            </video>
+            <figcaption>A HaMeR teleoperation in DexJoCo that failed. I teleoperated the Panda + CRAFT hand setup. However, as I did not feel contact, I was not successful in grasping and lifting the object.</figcaption>
+        </figure>
 
         <h2>Zero-Shot Allegro Policy Transfer to CRAFT</h2>
         <p>
@@ -442,19 +449,19 @@
                 <figcaption>Baseline: the trained DexJoCo policy succeeds on pick-and-bucket with the original Allegro hand.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-pick-bucket-success.jpg">
                     <source src="files/dexjoco-zero-shot/craft-pick-bucket-success.mp4" type="video/mp4">
                 </video>
                 <figcaption>Zero-shot CRAFT mapping succeeds on the same task.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/allegro-click-mouse-success.jpg">
                     <source src="files/dexjoco-zero-shot/allegro-click-mouse-success.mp4" type="video/mp4">
                 </video>
                 <figcaption>Baseline: Allegro succeeds in the original DexJoCo setup for click mouse task.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-hammer-nail-fail.jpg">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-click-mouse-success.jpg">
                     <source src="files/dexjoco-zero-shot/craft-click-mouse-success.mp4" type="video/mp4">
                 </video>
                 <figcaption>CRAFT-mapped click mouse rollout. The zero-shot mapped policy succeeds, but takes longer.</figcaption>
@@ -463,13 +470,13 @@
 
         <div class="craft-video-grid">
            <figure class="craft-video">
-                <video controls preload="metadata">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-hammer-nail-failure.jpg">
                     <source src="files/dexjoco-zero-shot/craft-hammer-nail-failure.mp4" type="video/mp4">
                 </video>
                 <figcaption>The mapped policy on CRAFT hand fails to grasp and lift the hammer.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata">
+                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-water-plant-failure.jpg">
                     <source src="files/dexjoco-zero-shot/craft-water-plant-failure.mp4" type="video/mp4">
                 </video>
                 <figcaption>The mapped policy on CRAFT hand does not grip the spray correctly and thus fails to use the spray to water the plant.</figcaption>
