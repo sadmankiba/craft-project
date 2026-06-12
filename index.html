@@ -116,6 +116,7 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 1.2rem;
+            align-items: start;
             margin: 1.2rem 0;
         }
 
@@ -327,12 +328,6 @@
                 </video>
                 <figcaption>HaMeR-driven CRAFT finger teleoperation in MuJoCo. The demo shows a side-by-side human hand input and simulated finger motion.</figcaption>
             </figure>
-            <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/dexjoco-hamer-teleop.jpg">
-                    <source src="files/craft-hand-project/dexjoco-hamer-teleop.mp4" type="video/mp4">
-                </video>
-                <figcaption>DexJoCo HaMeR teleoperation branch. The arm pose stays in the 7-value end-effector format while CRAFT receives direct 15-value controls.</figcaption>
-            </figure>
         </div>
 
         <h2>Vision-based Arm + Hand Teleoperation in Robosuite and DexJoCo</h2>
@@ -341,17 +336,49 @@
 
             After the presentation, we moved beyond finger-only teleoperation. In robosuite, we added a <code>CraftHand</code> gripper wrapper that loads the CRAFT MJCF model and attaches it to a Panda arm through robosuite's gripper factory. We verified that the hand could be attached, actuated, viewed, and stepped through robosuite's action path. We also verified that 3D pose and camera parameters prediction from HaMeR could be used to control both the CRAFT hand and the pose of the robot arm end effector in Robosuite. However, Robosuite's gripper classes were designed for two-finger parallel-jaw grippers and that imposed some limitations for joint controls. For example, during teleoperation, the CRAFT hand fingers could not be curled to the fully closed position. So, we switched to DexJoCo for teleoperation in simulation.
         </p>
-        <p>
-            DexJoCo created some simulation environment tasks for dexterous manipulation and the joint control for hands is more streamlined than Robosuite. We used HaMeR predicted values to control a Panda arm + CRAFT hand setup similar to Robosuite. This setup is described in next section. In DexJoCo, the existing single-arm action format was designed around Panda + Allegro:
-            <code>[end-effector xyz, quaternion, 16 Allegro joint targets]</code>. CRAFT does not match that interface: it has five fingers, 15 actuators, different thumb orientation, different joint couplings, and thinner fingers.
-            We therefore added two paths. For HaMeR teleoperation, CRAFT uses a direct 22-value action: <code>[end-effector xyz, quaternion, 15 CRAFT targets]</code>. For zero-shot policy tests, we kept a compatibility mapping from Allegro-shaped actions to CRAFT controls so trained DexJoCo policies could at least be evaluated without retraining.
-        </p>
+
         <figure class="craft-video">
             <video controls preload="metadata" poster="img/note/craft-hand-project/posters/vision-track-iiwa-craft.jpg">
                 <source src="files/craft-hand-project/vision-track-iiwa-craft.mp4" type="video/mp4">
             </video>
             <figcaption>Vision-based arm+CRAFT teleoperation in simulation. This exposed practical limitations: no haptic contact feedback, occasional hand tracking loss, and camera field-of-view constraints.</figcaption>
         </figure>
+
+        <p>
+            DexJoCo created some simulation environment tasks for dexterous manipulation and the joint control for hands is more streamlined than Robosuite. We used HaMeR predicted values to control a Panda arm + CRAFT hand setup similar to Robosuite. This setup is described in next section. In DexJoCo, the existing single-arm action format was designed around Panda + Allegro:
+            <code>[end-effector xyz, quaternion, 16 Allegro joint targets]</code>. CRAFT does not match that interface: it has five fingers, 15 actuators, different thumb orientation, different joint couplings, and thinner fingers.
+            We therefore added two paths. For HaMeR teleoperation, CRAFT uses a direct 22-value action: <code>[end-effector xyz, quaternion, 15 CRAFT targets]</code>. For zero-shot policy tests, we kept a compatibility mapping from Allegro-shaped actions to CRAFT controls so trained DexJoCo policies could at least be evaluated without retraining.
+        </p>
+
+        <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-teleoperation/click_mouse_success_ego_right.mp4" type="video/mp4">
+                </video>
+                <figcaption>Successful DexJoCo click-mouse teleoperation from the ego/right-hand view.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-teleoperation/click_mouse_success_front_side_by_side.mp4" type="video/mp4">
+                </video>
+                <figcaption>Successful DexJoCo click-mouse teleoperation shown from the front side-by-side view.</figcaption>
+            </figure>
+        </div>
+
+        <p>
+            We found the vision-based teleoperation is difficult for the operator as the hand tracking is not stable and the operator does not get any contact feedback. The tasks in DexJoCo required lifting and moving objects that required a tight grip, but the teleoperation was not precise enough to reliably achieve that. The operator also had to keep the hand in view of the camera, which made it difficult to position the arm and hand for certain tasks.  
+        </p>
+
+        
+
+        <div class="craft-video-grid">
+            <figure class="craft-video">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-teleoperation/pick_bucket_fail.mp4" type="video/mp4">
+                </video>
+                <figcaption>A HaMeR teleoperation in DexJoCo that failed. I teleoperated the Panda + CRAFT hand setup. However, as I did not feel contact, I was not successful in grasping and lifting the object.</figcaption>
+            </figure>
+        </div>
 
         <h2>Zero-Shot Allegro Policy Transfer to CRAFT</h2>
         <p>
