@@ -1,12 +1,8 @@
 # CRAFT Hand Blog Submission
 
-This repository includes a local-only submission copy of the CRAFT hand blog at:
+This repository is the standalone local submission for the CRAFT hand blog.
 
-```text
-submission/craft-hand-project/index.html
-```
-
-To preview it locally, open that file directly in a browser. It should render without running Jekyll because all image and video paths are relative to the submission folder.
+To preview it locally, open `index.html` directly in a browser. It should render without running Jekyll because all image and video paths are relative to the repository root.
 
 To prepare the zip file for upload:
 
