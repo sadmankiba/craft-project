@@ -185,6 +185,12 @@
             background: #f3f6fa;
         }
 
+        .craft-table-caption {
+            color: #41546a;
+            font-size: 0.95rem;
+            margin: -0.45rem 0 1.3rem;
+        }
+
         .craft-code {
             font-family: "Roboto Mono", monospace;
             font-size: 0.9rem;
@@ -310,13 +316,6 @@
             </tbody>
         </table>
 
-        <figure class="craft-video">
-            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/panda-craft-mount.jpg">
-                <source src="files/craft-hand-project/panda-craft-mount.mp4" type="video/mp4">
-            </video>
-            <figcaption>CRAFT mounted on a Panda arm in simulation. This was an asset and control validation step before teleoperation and policy tests.</figcaption>
-        </figure>
-
         <h2>HaMeR to CRAFT Teleoperation in MuJoCo</h2>
         <p>
             The CRAFT hand authors provided a teleoperation script with HaMeR for the physical CRAFT hand. For physical hand, the HaMeR's predicted parameters were inverted for the non-thumb and non-index fingers, and for all MCP sideways controls. For the simulated hand, we only inverted the Thumb PIP value from HaMeR's predictions. We also limited the MCP sideways ranges of CRAFT hand while mapping from HaMeR as the simulated CRAFT hand has wide MCP sideways range unlike human. We ran HaMeR live on detected right-hand boxes, extracted MANO wrist and finger poses, calibrated per-joint min/max ranges, and converted those values into 15 CRAFT commands.
@@ -336,6 +335,13 @@
 
             After the presentation, we moved beyond finger-only teleoperation. In robosuite, we added a <code>CraftHand</code> gripper wrapper that loads the CRAFT MJCF model and attaches it to a Panda arm through robosuite's gripper factory. We verified that the hand could be attached, actuated, viewed, and stepped through robosuite's action path. We also verified that 3D pose and camera parameters prediction from HaMeR could be used to control both the CRAFT hand and the pose of the robot arm end effector in Robosuite. However, Robosuite's gripper classes were designed for two-finger parallel-jaw grippers and that imposed some limitations for joint controls. For example, during teleoperation, the CRAFT hand fingers could not be curled to the fully closed position. So, we switched to DexJoCo for teleoperation in simulation.
         </p>
+
+        <figure class="craft-video">
+            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/panda-craft-mount.jpg">
+                <source src="files/craft-hand-project/panda-craft-mount.mp4" type="video/mp4">
+            </video>
+            <figcaption>CRAFT mounted on a Panda arm in simulation. This was an asset and control validation step before teleoperation and policy tests.</figcaption>
+        </figure>
 
         <figure class="craft-video">
             <video controls preload="metadata" poster="img/note/craft-hand-project/posters/vision-track-iiwa-craft.jpg">
@@ -395,6 +401,39 @@
             Our finding was that the mapping for CRAFT hand works sometimes, but has lower success rate than the original Allegro hand. We observed that CRAFT's uneven inner fingers reduced contact surface, the mapped thumb often failed to create a tight grip to lift objects, and the curl with the coupled medial-distal joints did not match what the Allegro-trained policy expected. These failures are good evidence that CRAFT likely needs either CRAFT-specific demonstrations, retargeted physically plausible data, or policy fine-tuning in the CRAFT simulator rather than a purely geometric action remap.
         </p>
 
+        <figure>
+            <table class="craft-table">
+                <thead>
+                    <tr>
+                        <th>Hand</th>
+                        <th>plant_water</th>
+                        <th>click_mouse</th>
+                        <th>hammer_nail</th>
+                        <th>pick_bucket</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Original Allegro hand</td>
+                        <td>60%</td>
+                        <td>30%</td>
+                        <td>80%</td>
+                        <td>70%</td>
+                    </tr>
+                    <tr>
+                        <td>CRAFT hand</td>
+                        <td>0%</td>
+                        <td>30%</td>
+                        <td>0%</td>
+                        <td>20%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <figcaption class="craft-table-caption">
+                Zero-shot inference success rates using the DexJoCo-Pi0.5 model. We used the multi-task model which was finetuned on all DexJoCo tasks and evaluated on 10 episodes for each task.
+            </figcaption>
+        </figure>
+
         <div class="craft-video-grid">
             <figure class="craft-video">
                 <video controls preload="metadata" poster="img/note/craft-hand-project/posters/allegro-pick-bucket-success.jpg">
@@ -403,31 +442,40 @@
                 <figcaption>Baseline: the trained DexJoCo policy succeeds on pick-and-bucket with the original Allegro hand.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-pick-bucket-fail.jpg">
-                    <source src="files/craft-hand-project/craft-pick-bucket-fail.mp4" type="video/mp4">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-zero-shot/craft-pick-bucket-success.mp4" type="video/mp4">
                 </video>
-                <figcaption>Zero-shot CRAFT mapping fails on the same style of task, showing that actuator remapping is not enough.</figcaption>
+                <figcaption>Zero-shot CRAFT mapping succeeds on the same task.</figcaption>
             </figure>
             <figure class="craft-video">
-                <video controls preload="metadata" poster="img/note/craft-hand-project/posters/allegro-hammer-nail-success.jpg">
-                    <source src="files/craft-hand-project/allegro-hammer-nail-success.mp4" type="video/mp4">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-zero-shot/allegro-click-mouse-success.mp4" type="video/mp4">
                 </video>
-                <figcaption>Baseline: Allegro hammer/nail policy succeeds in the original DexJoCo setup.</figcaption>
+                <figcaption>Baseline: Allegro succeeds in the original DexJoCo setup for click mouse task.</figcaption>
             </figure>
             <figure class="craft-video">
                 <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-hammer-nail-fail.jpg">
-                    <source src="files/craft-hand-project/craft-hammer-nail-fail.mp4" type="video/mp4">
+                    <source src="files/dexjoco-zero-shot/craft-click-mouse-success.mp4" type="video/mp4">
                 </video>
-                <figcaption>CRAFT-mapped hammer/nail rollout. The failure highlights thumb opposition and finger-curl mismatch.</figcaption>
+                <figcaption>CRAFT-mapped click mouse rollout. The zero-shot mapped policy succeeds, but takes longer.</figcaption>
             </figure>
         </div>
 
-        <figure class="craft-video">
-            <video controls preload="metadata" poster="img/note/craft-hand-project/posters/craft-hammer-nail-partial.jpg">
-                <source src="files/craft-hand-project/craft-hammer-nail-partial.mp4" type="video/mp4">
-            </video>
-            <figcaption>A more favorable CRAFT hammer/nail rollout. This suggests the mapping can produce meaningful motion, but success depends heavily on contact geometry and task conditions.</figcaption>
-        </figure>
+        <div class="craft-video-grid">
+           <figure class="craft-video">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-zero-shot/craft-hammer-nail-failure.mp4" type="video/mp4">
+                </video>
+                <figcaption>The mapped policy on CRAFT hand fails to grasp and lift the hammer.</figcaption>
+            </figure>
+            <figure class="craft-video">
+                <video controls preload="metadata">
+                    <source src="files/dexjoco-zero-shot/craft-water-plant-failure.mp4" type="video/mp4">
+                </video>
+                <figcaption>The mapped policy on CRAFT hand does not grip the spray correctly and thus fails to use the spray to water the plant.</figcaption>
+            </figure>
+        </div>
+        
 
         <h2>What Worked, What Did Not</h2>
         <table class="craft-table">
